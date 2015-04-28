@@ -4,6 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.forms.widgets import media_property
 from django.utils import six
 from django.utils.safestring import SafeText
+import reversion
 from cms.plugin_pool import plugin_pool
 from cms.plugin_base import CMSPluginBaseMetaclass, CMSPluginBase
 from .models_base import CascadeModelBase
@@ -37,6 +38,7 @@ class CascadePluginBaseMetaclass(CMSPluginBaseMetaclass):
             base_model = CascadeElement
         model_mixins = attrs.pop('model_mixins', ())
         attrs['model'] = CascadePluginBaseMetaclass.create_model(name, model_mixins, base_model)
+        reversion.register(attrs['model'])
         return super(CascadePluginBaseMetaclass, cls).__new__(cls, name, bases, attrs)
 
     @staticmethod
